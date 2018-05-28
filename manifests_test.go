@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-func Test_applyManifests(t *testing.T) {
+func Test_applyManifest(t *testing.T) {
 	type args struct {
 		in []byte
 	}
@@ -15,8 +15,8 @@ func Test_applyManifests(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := applyManifests(tt.args.in); (err != nil) != tt.wantErr {
-				t.Errorf("applyManifests() error = %v, wantErr %v", err, tt.wantErr)
+			if err := applyManifest(tt.args.in); (err != nil) != tt.wantErr {
+				t.Errorf("applyManifest() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
