@@ -1,16 +1,6 @@
 builds:
-  - binary: itdns
-    main: ./main.go
-    goos:
-      - windows
-      - darwin
-      - linux
-    goarch:
-      - amd64
-      - arm
-      - arm64
   - binary: helmet-controller
-    main: ./main.go
+    main: ./
     goos:
       - windows
       - darwin
