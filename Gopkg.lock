@@ -167,6 +167,12 @@
   revision = "abeda66eb583fac2d8d98d3d2e6fbd5c67af7947"
 
 [[projects]]
+  name = "github.com/spf13/pflag"
+  packages = ["."]
+  revision = "583c0c0531f06d5278b7d917446061adc344b5cd"
+  version = "v1.0.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
@@ -292,7 +298,6 @@
   revision = "d216743eed4c3242b85d094d2a589f41a793652d"
 
 [[projects]]
-  branch = "master"
   name = "k8s.io/apimachinery"
   packages = [
     "pkg/api/errors",
@@ -331,7 +336,8 @@
     "pkg/watch",
     "third_party/forked/golang/reflect"
   ]
-  revision = "5276ed7d4167a2c2aee37f42866688926f11ffb3"
+  revision = "302974c03f7e50f16561ba237db776ab93594ef6"
+  version = "kubernetes-1.10.0"
 
 [[projects]]
   name = "k8s.io/client-go"
@@ -387,6 +393,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6f4046b84add6543adce071f6e9955e313959c99d492b4b13b09543e3ae7eb51"
+  inputs-digest = "a190e1259824a0532aeae80e09c92f354c360149f9bf61e45f3431eadac25674"
   solver-name = "gps-cdcl"
   solver-version = 1
