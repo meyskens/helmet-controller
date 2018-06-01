@@ -18,7 +18,7 @@ func putDeployment(c echo.Context) error {
 
 	newChart, err := chart.Clone()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	newChart.MergeValues(data.Values)
@@ -26,11 +26,11 @@ func putDeployment(c echo.Context) error {
 	for _, manifest := range manifests {
 		err = applyManifest(namespace, manifest)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		}
 	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"result": "success"})
@@ -43,7 +43,7 @@ func deleteDeployment(c echo.Context) error {
 
 	newChart, err := chart.Clone()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	newChart.MergeValues(data.Values)
@@ -51,11 +51,11 @@ func deleteDeployment(c echo.Context) error {
 	for _, manifest := range manifests {
 		err = deleteManifest(namespace, manifest)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		}
 	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"result": "success"})
