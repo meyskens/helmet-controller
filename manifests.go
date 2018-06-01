@@ -51,12 +51,11 @@ func applyManifest(namespace string, in []byte) error {
 		return err
 	case *v1.Service:
 		_, err := client.CoreV1().Services(namespace).Get(o.Name, meta.GetOptions{})
-		if err != nil {
-			// need to create
-			_, err = client.CoreV1().Services(namespace).Create(o)
-		} else {
-			_, err = client.CoreV1().Services(namespace).Update(o)
+		if err == nil {
+			// there is a bug here that doesn't allow updates
+			err = client.CoreV1().Services(namespace).Delete(o.Name, &meta.DeleteOptions{})
 		}
+		_, err = client.CoreV1().Services(namespace).Create(o)
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	default:
@@ -83,7 +82,7 @@ func deleteManifest(namespace string, in []byte) error {
 	// more to be added soon
 	switch o := obj.(type) {
 	case *apps.Deployment:
-		err = client.Apps().Deployments(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.AppsV1().Deployments(namespace).Delete(o.Name, &meta.DeleteOptions{})
 		break
 	case *ext.Ingress:
 		err = client.ExtensionsV1beta1().Ingresses(namespace).Delete(o.Name, &meta.DeleteOptions{})
