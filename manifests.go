@@ -22,6 +22,7 @@ func applyManifest(namespace string, in []byte) error {
 	obj, _, err := decode(in, nil, nil)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error while decoding YAML object. Err was: %s", err))
+		return errors.New("Error parsing YAML")
 	}
 
 	// now use switch over the type of the object
@@ -29,13 +30,14 @@ func applyManifest(namespace string, in []byte) error {
 	// more to be added soon
 	switch o := obj.(type) {
 	case *apps.Deployment:
-		_, err := client.Apps().Deployments(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.AppsV1().Deployments(namespace).Get(o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.Apps().Deployments(namespace).Create(o)
+			_, err = client.AppsV1().Deployments(namespace).Create(o)
 		} else {
-			_, err = client.Apps().Deployments(namespace).Update(o)
+			_, err = client.AppsV1().Deployments(namespace).Update(o)
 		}
+		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *ext.Ingress:
 		_, err := client.ExtensionsV1beta1().Ingresses(namespace).Get(o.Name, meta.GetOptions{})
@@ -45,6 +47,7 @@ func applyManifest(namespace string, in []byte) error {
 		} else {
 			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Update(o)
 		}
+		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *v1.Service:
 		_, err := client.CoreV1().Services(namespace).Get(o.Name, meta.GetOptions{})
@@ -54,9 +57,11 @@ func applyManifest(namespace string, in []byte) error {
 		} else {
 			_, err = client.CoreV1().Services(namespace).Update(o)
 		}
+		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	default:
 		//o is unknown for us
+		log.Printf("Unknown type for:\n%s\n", string(in))
 		return errors.New("Unknown type")
 	}
 }
