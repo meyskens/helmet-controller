@@ -34,7 +34,7 @@ func main() {
 		if correctKey == "" {
 			return false, errors.New("Token not set")
 		}
-		return key == "valid-key", nil
+		return key == correctKey, nil
 	}))
 
 	e.GET("/", getRoot)
