@@ -29,15 +29,33 @@ func applyManifest(namespace string, in []byte) error {
 	// more to be added soon
 	switch o := obj.(type) {
 	case *apps.Deployment:
-		_, err := client.Apps().Deployments(namespace).Update(o)
+		_, err := client.Apps().Deployments(namespace).Get(o.Name, &meta.GetOptions{})
+		if err != nil {
+			// need to create
+			_, err := client.Apps().Deployments(namespace).Create(o)
+		} else {
+			_, err := client.Apps().Deployments(namespace).Update(o)
+		}
 		return err
 		break
 	case *ext.Ingress:
-		_, err := client.ExtensionsV1beta1().Ingresses(namespace).Update(o)
+		_, err := client.ExtensionsV1beta1().Ingresses(namespace).Get(o.Name, &meta.GetOptions{})
+		if err != nil {
+			// need to create
+			_, err := client.ExtensionsV1beta1().Ingresses(namespace).Create(o)
+		} else {
+			_, err := client.ExtensionsV1beta1().Ingresses(namespace).Update(o)
+		}
 		return err
 		break
 	case *v1.Service:
-		_, err := client.CoreV1().Services(namespace).Update(o)
+		_, err := client.CoreV1().Services(namespace).Get(o.Name, &meta.GetOptions{})
+		if err != nil {
+			// need to create
+			_, err := client.CoreV1().Services(namespace).Create(o)
+		} else {
+			_, err := client.CoreV1().Services(namespace).Update(o)
+		}
 		return err
 		break
 	default:
