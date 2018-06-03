@@ -101,6 +101,9 @@ func deleteManifest(namespace string, in []byte) error {
 	case *v1.Service:
 		err = client.CoreV1().Services(namespace).Delete(o.Name, &meta.DeleteOptions{})
 		break
+	case *batch.Job:
+		err = client.BatchV1().Jobs(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		break
 	default:
 		//o is unknown for us
 		return errors.New("Unknown type")
