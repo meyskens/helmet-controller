@@ -50,6 +50,16 @@ func applyManifest(namespace string, in []byte) error {
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
+	case *ext.DaemonSet:
+		_, err := client.ExtensionsV1beta1().DaemonSets(namespace).Get(o.Name, meta.GetOptions{})
+		if err != nil {
+			// need to create
+			_, err = client.ExtensionsV1beta1().DaemonSets(namespace).Create(o)
+		} else {
+			_, err = client.ExtensionsV1beta1().DaemonSets(namespace).Update(o)
+		}
+		log.Printf("Error %s in:\n%s\n", err, string(in))
+		return err
 	case *v1.Service:
 		_, err := client.CoreV1().Services(namespace).Get(o.Name, meta.GetOptions{})
 		if err == nil {
@@ -97,6 +107,9 @@ func deleteManifest(namespace string, in []byte) error {
 		break
 	case *ext.Ingress:
 		err = client.ExtensionsV1beta1().Ingresses(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		break
+	case *ext.DaemonSet:
+		err = client.ExtensionsV1beta1().DaemonSets(namespace).Delete(o.Name, &meta.DeleteOptions{})
 		break
 	case *v1.Service:
 		err = client.CoreV1().Services(namespace).Delete(o.Name, &meta.DeleteOptions{})
