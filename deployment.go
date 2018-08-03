@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/labstack/echo"
 	"github.com/meyskens/helmet/template"
@@ -22,7 +23,17 @@ func putDeployment(c echo.Context) error {
 	}
 
 	newChart.MergeValues(data.Values)
-	manifests, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
+	files, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
+
+	manifests := [][]byte{}
+	for _, file := range files {
+		for _, yamlFile := range strings.Split(string(file), "---") {
+			if strings.TrimSpace(yamlFile) != "" {
+				manifests = append(manifests, []byte(yamlFile))
+			}
+		}
+	}
+
 	for _, manifest := range manifests {
 		err = applyManifest(namespace, manifest)
 		if err != nil {
