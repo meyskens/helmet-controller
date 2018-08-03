@@ -79,6 +79,16 @@ func applyManifest(namespace string, in []byte) error {
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
+	case *v1.Secret:
+		_, err := client.CoreV1().Secrets(namespace).Get(o.Name, meta.GetOptions{})
+		if err != nil {
+			// need to create
+			_, err = client.CoreV1().Secrets(namespace).Create(o)
+		} else {
+			_, err = client.CoreV1().Secrets(namespace).Update(o)
+		}
+		log.Printf("Error %s in:\n%s\n", err, string(in))
+		return err
 	default:
 		//o is unknown for us
 		log.Printf("Unknown type for:\n%s\n", string(in))
@@ -116,6 +126,9 @@ func deleteManifest(namespace string, in []byte) error {
 		break
 	case *batch.Job:
 		err = client.BatchV1().Jobs(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		break
+	case *v1.Secret:
+		err = client.CoreV1().Secrets(namespace).Delete(o.Name, &meta.DeleteOptions{})
 		break
 	default:
 		//o is unknown for us
