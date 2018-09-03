@@ -4,12 +4,30 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
+
 	"github.com/labstack/echo"
 	"github.com/meyskens/helmet/template"
 )
 
 type putData struct {
-	Values map[interface{}]interface{} `json:"values"`
+	Values map[string]interface{} `json:"values"`
+}
+
+func mapStringInterfaceToMapInterfaceInterace(in map[string]interface{}) map[interface{}]interface{} {
+	m := map[interface{}]interface{}{}
+	for k, v := range in {
+		m[k] = v
+		switch v.(type) {
+		case map[string]interface{}:
+			m[k] = mapStringInterfaceToMapInterfaceInterace(v.(map[string]interface{}))
+			break
+		default:
+			m[k] = v
+		}
+	}
+
+	return m
 }
 
 func putDeployment(c echo.Context) error {
@@ -22,7 +40,8 @@ func putDeployment(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	newChart.MergeValues(data.Values)
+	spew.Dump(mapStringInterfaceToMapInterfaceInterace(data.Values))
+	newChart.MergeValues(mapStringInterfaceToMapInterfaceInterace(data.Values))
 	files, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
 
 	manifests := [][]byte{}
@@ -57,7 +76,7 @@ func deleteDeployment(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	newChart.MergeValues(data.Values)
+	//newChart.MergeValues(data.Values)
 	manifests, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
 	for _, manifest := range manifests {
 		err = deleteManifest(namespace, manifest)
