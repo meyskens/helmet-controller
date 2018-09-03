@@ -9,7 +9,7 @@ import (
 )
 
 type putData struct {
-	Values map[string]interface{} `json:"values"`
+	Values map[interface{}]interface{} `json:"values"`
 }
 
 func putDeployment(c echo.Context) error {

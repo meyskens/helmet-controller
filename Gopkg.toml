@@ -26,10 +26,6 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/meyskens/helmet"
-
-[[constraint]]
-  branch = "master"
   name = "k8s.io/api"
 
 [[constraint]]
