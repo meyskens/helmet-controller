@@ -1,5 +1,7 @@
 builds:
-  - binary: helmet-controller
+  - env:
+    - CGO_ENABLED=0
+    binary: helmet-controller
     main: ./
     goos:
       - windows
