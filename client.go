@@ -1,8 +1,13 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
+
+	"github.com/apex/log"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 var cs *kubernetes.Clientset
@@ -11,9 +16,23 @@ func newKubernetesClient() (*kubernetes.Clientset, error) {
 	if cs != nil {
 		return cs, nil
 	}
-	config, err := rest.InClusterConfig()
-	if err != nil {
-		return nil, err
+	var config *rest.Config
+	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
+		var err error
+		config, err = rest.InClusterConfig()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		log.Info("Not in cluster, using .kube/config")
+		home := homeDir()
+		kubeconfig := filepath.Join(home, ".kube", "config")
+		// use the current context in kubeconfig
+		var err error
+		config, err = clientcmd.BuildConfigFromFlags("", kubeconfig)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	client, err := kubernetes.NewForConfig(config)
@@ -22,4 +41,11 @@ func newKubernetesClient() (*kubernetes.Clientset, error) {
 	}
 
 	return client, err
+}
+
+func homeDir() string {
+	if h := os.Getenv("HOME"); h != "" {
+		return h
+	}
+	return os.Getenv("USERPROFILE") // windows
 }
