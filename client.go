@@ -17,7 +17,7 @@ func newKubernetesClient() (*kubernetes.Clientset, error) {
 		return cs, nil
 	}
 	var config *rest.Config
-	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" {
+	if os.Getenv("KUBERNETES_SERVICE_HOST") != "" && os.Getenv("USE_KUBE_CONFIG") == "" {
 		var err error
 		config, err = rest.InClusterConfig()
 		if err != nil {
