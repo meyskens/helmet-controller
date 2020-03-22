@@ -25,10 +25,7 @@ func newKubernetesClient() (*kubernetes.Clientset, error) {
 		}
 	} else {
 		log.Info("Not in cluster, using .kube/config")
-		home, err := os.UserHomeDir()
-		if err != nil {
-			return nil, err
-		}
+		home, _ := os.UserHomeDir()
 		kubeconfig := filepath.Join(home, ".kube", "config")
 		// use the current context in kubeconfig
 		var err error
