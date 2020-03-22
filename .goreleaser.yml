@@ -15,8 +15,8 @@ dockers:
   - goos: linux
     goarch: amd64
     goarm: ''
-    binary: helmet-controller
-    image: maartje/helmet-controller
+    binaries: 
+      - helmet-controller
     skip_push: false
     dockerfile: Dockerfile
     # Template of the docker tag. Defaults to `{{ .Version }}`.
@@ -27,15 +27,19 @@ dockers:
     # - `.Minor`
     # - `.Patch`
     # - `.Env.VARIABLE_NAME`
-    tag_templates:
-    - "amd64-{{ .Tag }}"
-    - "amd64-v{{ .Major }}"
-    - amd64-latest
+    image_templates: 
+      - "maartje/helmet-controller:amd64-{{ .Tag }}"
+      - "maartje/helmet-controller:amd64-{{ .Major }}"
+      - "maartje/helmet-controller:amd64-latest"
   - goos: linux
     goarch: arm64
     goarm: ''
-    binary: helmet-controller
-    image: maartje/helmet-controller
+    binaries: 
+      - helmet-controller
+    image_templates: 
+      - "maartje/helmet-controller:arm64-{{ .Tag }}"
+      - "maartje/helmet-controller:arm64-{{ .Major }}"
+      - "maartje/helmet-controller:arm64-latest"
     skip_push: false
     dockerfile: Dockerfile
     # Template of the docker tag. Defaults to `{{ .Version }}`.
@@ -46,15 +50,11 @@ dockers:
     # - `.Minor`
     # - `.Patch`
     # - `.Env.VARIABLE_NAME`
-    tag_templates:
-    - "arm64-{{ .Tag }}"
-    - "arm64-v{{ .Major }}"
-    - arm64-latest
   - goos: linux
     goarch: arm
     goarm: '6'
-    binary: helmet-controller
-    image: maartje/helmet-controller
+    binaries: 
+      - helmet-controller
     skip_push: false
     dockerfile: Dockerfile
     # Template of the docker tag. Defaults to `{{ .Version }}`.
@@ -65,7 +65,7 @@ dockers:
     # - `.Minor`
     # - `.Patch`
     # - `.Env.VARIABLE_NAME`
-    tag_templates:
-    - "armhf-{{ .Tag }}"
-    - "armhf-v{{ .Major }}"
-    - armhf-latest
+    image_templates: 
+      - "maartje/helmet-controller:armhf-{{ .Tag }}"
+      - "maartje/helmet-controller:armhf-{{ .Major }}"
+      - "maartje/helmet-controller:armhf-latest"
