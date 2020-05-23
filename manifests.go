@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -32,91 +33,91 @@ func applyManifest(namespace string, in []byte) error {
 	// more to be added soon
 	switch o := obj.(type) {
 	case *apps.Deployment:
-		_, err := client.AppsV1().Deployments(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.AppsV1().Deployments(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.AppsV1().Deployments(namespace).Create(o)
+			_, err = client.AppsV1().Deployments(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.AppsV1().Deployments(namespace).Update(o)
+			_, err = client.AppsV1().Deployments(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *ext.Ingress:
-		_, err := client.ExtensionsV1beta1().Ingresses(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.ExtensionsV1beta1().Ingresses(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Create(o)
+			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Update(o)
+			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *networkingv1beta1.Ingress:
-		_, err := client.NetworkingV1beta1().Ingresses(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.NetworkingV1beta1().Ingresses(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.NetworkingV1beta1().Ingresses(namespace).Create(o)
+			_, err = client.NetworkingV1beta1().Ingresses(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.NetworkingV1beta1().Ingresses(namespace).Update(o)
+			_, err = client.NetworkingV1beta1().Ingresses(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *ext.DaemonSet:
-		_, err := client.ExtensionsV1beta1().DaemonSets(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.ExtensionsV1beta1().DaemonSets(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.ExtensionsV1beta1().DaemonSets(namespace).Create(o)
+			_, err = client.ExtensionsV1beta1().DaemonSets(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.ExtensionsV1beta1().DaemonSets(namespace).Update(o)
+			_, err = client.ExtensionsV1beta1().DaemonSets(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *v1.Service:
-		_, err := client.CoreV1().Services(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.CoreV1().Services(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err == nil {
 			// there is a bug here that doesn't allow updates
-			err = client.CoreV1().Services(namespace).Delete(o.Name, &meta.DeleteOptions{})
+			err = client.CoreV1().Services(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		}
-		_, err = client.CoreV1().Services(namespace).Create(o)
+		_, err = client.CoreV1().Services(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *batch.Job:
-		_, err := client.BatchV1().Jobs(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.BatchV1().Jobs(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.BatchV1().Jobs(namespace).Create(o)
+			_, err = client.BatchV1().Jobs(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.BatchV1().Jobs(namespace).Update(o)
+			_, err = client.BatchV1().Jobs(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *v1.Secret:
-		_, err := client.CoreV1().Secrets(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.CoreV1().Secrets(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.CoreV1().Secrets(namespace).Create(o)
+			_, err = client.CoreV1().Secrets(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.CoreV1().Secrets(namespace).Update(o)
+			_, err = client.CoreV1().Secrets(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *v1.PersistentVolume:
-		_, err := client.CoreV1().PersistentVolumes().Get(o.Name, meta.GetOptions{})
+		_, err := client.CoreV1().PersistentVolumes().Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.CoreV1().PersistentVolumes().Create(o)
+			_, err = client.CoreV1().PersistentVolumes().Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.CoreV1().PersistentVolumes().Update(o)
+			_, err = client.CoreV1().PersistentVolumes().Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
 	case *v1.PersistentVolumeClaim:
-		_, err := client.CoreV1().PersistentVolumeClaims(namespace).Get(o.Name, meta.GetOptions{})
+		_, err := client.CoreV1().PersistentVolumeClaims(namespace).Get(context.TODO(), o.Name, meta.GetOptions{})
 		if err != nil {
 			// need to create
-			_, err = client.CoreV1().PersistentVolumeClaims(namespace).Create(o)
+			_, err = client.CoreV1().PersistentVolumeClaims(namespace).Create(context.TODO(), o, meta.CreateOptions{})
 		} else {
-			_, err = client.CoreV1().PersistentVolumeClaims(namespace).Update(o)
+			_, err = client.CoreV1().PersistentVolumeClaims(namespace).Update(context.TODO(), o, meta.UpdateOptions{})
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
@@ -144,28 +145,28 @@ func deleteManifest(namespace string, in []byte) error {
 	// more to be added soon
 	switch o := obj.(type) {
 	case *apps.Deployment:
-		err = client.AppsV1().Deployments(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.AppsV1().Deployments(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *ext.Ingress:
-		err = client.ExtensionsV1beta1().Ingresses(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.ExtensionsV1beta1().Ingresses(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *ext.DaemonSet:
-		err = client.ExtensionsV1beta1().DaemonSets(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.ExtensionsV1beta1().DaemonSets(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *v1.Service:
-		err = client.CoreV1().Services(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.CoreV1().Services(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *batch.Job:
-		err = client.BatchV1().Jobs(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.BatchV1().Jobs(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *v1.Secret:
-		err = client.CoreV1().Secrets(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.CoreV1().Secrets(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *v1.PersistentVolume:
-		err = client.CoreV1().PersistentVolumes().Delete(o.Name, &meta.DeleteOptions{})
+		err = client.CoreV1().PersistentVolumes().Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	case *v1.PersistentVolumeClaim:
-		err = client.CoreV1().PersistentVolumeClaims(namespace).Delete(o.Name, &meta.DeleteOptions{})
+		err = client.CoreV1().PersistentVolumeClaims(namespace).Delete(context.TODO(), o.Name, meta.DeleteOptions{})
 		break
 	default:
 		//o is unknown for us
