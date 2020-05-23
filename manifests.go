@@ -7,8 +7,9 @@ import (
 
 	apps "k8s.io/api/apps/v1"
 	batch "k8s.io/api/batch/v1"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	ext "k8s.io/api/extensions/v1beta1"
+	networkingv1beta1 "k8s.io/api/networking/v1beta1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 )
@@ -47,6 +48,16 @@ func applyManifest(namespace string, in []byte) error {
 			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Create(o)
 		} else {
 			_, err = client.ExtensionsV1beta1().Ingresses(namespace).Update(o)
+		}
+		log.Printf("Error %s in:\n%s\n", err, string(in))
+		return err
+	case *networkingv1beta1.Ingress:
+		_, err := client.NetworkingV1beta1().Ingresses(namespace).Get(o.Name, meta.GetOptions{})
+		if err != nil {
+			// need to create
+			_, err = client.NetworkingV1beta1().Ingresses(namespace).Create(o)
+		} else {
+			_, err = client.NetworkingV1beta1().Ingresses(namespace).Update(o)
 		}
 		log.Printf("Error %s in:\n%s\n", err, string(in))
 		return err
