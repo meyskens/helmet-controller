@@ -47,6 +47,10 @@ func putDeployment(c echo.Context) error {
 	spew.Dump(mapStringInterfaceToMapInterfaceInterace(data.Values))
 	newChart.MergeValues(mapStringInterfaceToMapInterfaceInterace(data.Values))
 	files, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
+	if err != nil {
+		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
 
 	manifests := [][]byte{}
 	for _, file := range files {
@@ -60,11 +64,9 @@ func putDeployment(c echo.Context) error {
 	for _, manifest := range manifests {
 		err = applyManifest(namespace, manifest)
 		if err != nil {
+			log.Println(err)
 			return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 		}
-	}
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"result": "success"})
@@ -82,6 +84,10 @@ func deleteDeployment(c echo.Context) error {
 
 	//newChart.MergeValues(data.Values)
 	manifests, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
+	if err != nil {
+		log.Println(err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
 	for _, manifest := range manifests {
 		err = deleteManifest(namespace, manifest)
 		if err != nil {
