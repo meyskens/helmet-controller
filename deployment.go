@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"strings"
 
@@ -33,7 +34,10 @@ func mapStringInterfaceToMapInterfaceInterace(in map[string]interface{}) map[int
 func putDeployment(c echo.Context) error {
 	data := putData{}
 	name := c.Param("name")
-	c.Bind(&data)
+	err := c.Bind(&data)
+	if err != nil {
+		log.Println(err)
+	}
 
 	newChart, err := chart.Clone()
 	if err != nil {

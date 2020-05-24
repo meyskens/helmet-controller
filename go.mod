@@ -18,10 +18,11 @@ require (
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0 // indirect
-	github.com/meyskens/helmet v0.0.0-20180903160112-960c2de30df7
+	github.com/meyskens/helmet v0.0.0-20180903155152-470c5a1c4b9d
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/pmylund/sortutil v0.0.0-20120526081524-abeda66eb583 // indirect
+	github.com/spf13/cobra v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.1.0 // indirect
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
 	golang.org/x/net v0.0.0-20200513185701-a91f0712d120 // indirect
