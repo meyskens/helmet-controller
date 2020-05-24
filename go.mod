@@ -18,7 +18,7 @@ require (
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0 // indirect
-	github.com/meyskens/helmet v0.0.0-20180903155152-470c5a1c4b9d
+	github.com/meyskens/helmet v0.0.0-20200524182144-16e707eeb57f
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/pmylund/sortutil v0.0.0-20120526081524-abeda66eb583 // indirect
