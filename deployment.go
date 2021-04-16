@@ -39,26 +39,9 @@ func putDeployment(c echo.Context) error {
 		log.Println(err)
 	}
 
-	newChart, err := chart.Clone()
+	manifests, err := buildManifests(c, data, name)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
-	}
-
-	spew.Dump(mapStringInterfaceToMapInterfaceInterace(data.Values))
-	newChart.MergeValues(mapStringInterfaceToMapInterfaceInterace(data.Values))
-	files, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
-	if err != nil {
-		log.Println(err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
-	}
-
-	manifests := [][]byte{}
-	for _, file := range files {
-		for _, yamlFile := range strings.Split(string(file), "---") {
-			if strings.TrimSpace(yamlFile) != "" {
-				manifests = append(manifests, []byte(yamlFile))
-			}
-		}
+		return err
 	}
 
 	for _, manifest := range manifests {
@@ -70,6 +53,32 @@ func putDeployment(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"result": "success"})
+}
+
+func buildManifests(c echo.Context, data putData, name string) ([][]byte, error) {
+	newChart, err := chart.Clone()
+	if err != nil {
+		return nil, c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	spew.Dump(mapStringInterfaceToMapInterfaceInterace(data.Values))
+	newChart.MergeValues(mapStringInterfaceToMapInterfaceInterace(data.Values))
+	files, _, err := newChart.CreateManifests(template.NewRelease(name, namespace))
+	if err != nil {
+		log.Println(err)
+		return nil, c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	manifests := [][]byte{}
+	for _, file := range files {
+		for _, yamlFile := range strings.Split(string(file), "---") {
+			if strings.TrimSpace(yamlFile) != "" {
+				manifests = append(manifests, []byte(yamlFile))
+				log.Println(yamlFile)
+			}
+		}
+	}
+	return manifests, nil
 }
 
 func deleteDeployment(c echo.Context) error {

@@ -13,12 +13,10 @@ require (
 	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/huandu/xstrings v1.3.1 // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
-	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
-	github.com/kr/pretty v0.2.0 // indirect
 	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/gommon v0.3.0 // indirect
-	github.com/meyskens/helmet v0.0.0-20210416143144-dfe071bfd8b7
+	github.com/meyskens/helmet v0.0.0-20210416154316-06e2803e03c8
 	github.com/mitchellh/copystructure v1.0.0 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/pmylund/sortutil v0.0.0-20120526081524-abeda66eb583 // indirect
@@ -30,10 +28,10 @@ require (
 	golang.org/x/sys v0.0.0-20200515095857-1151b9dac4a9 // indirect
 	golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
-	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v1 v1.0.0-20140924161607-9f9df34309c0 // indirect
 	k8s.io/api v0.18.2
 	k8s.io/apimachinery v0.18.2
 	k8s.io/client-go v0.18.2
 	k8s.io/utils v0.0.0-20200414100711-2df71ebbae66 // indirect
+	sigs.k8s.io/structured-merge-diff/v3 v3.0.0 // indirect
 )
